@@ -1,5 +1,6 @@
-export HF_TOKEN="hf_..."
-
+if [ -f /root/.huggingface/token ]; then
+    export HF_HUB_TOKEN=$(cat /root/.huggingface/token)
+fi
 
 export CUDA_VISIBLE_DEVICES=0,1
 export PYTHONPATH="/lab/DeSTA2.5-Audio":$PYTHONPATH
