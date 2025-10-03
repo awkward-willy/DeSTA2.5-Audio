@@ -1,7 +1,7 @@
 import pytorch_lightning as pl
 import torch
 from desta.utils.utils import run
-from apex.optimizers import FusedAdam
+from torch.optim import AdamW
 from desta.models.modeling_desta25 import DeSTA25AudioModel, DeSTA25Config
 from transformers import get_cosine_schedule_with_warmup
 import logging
@@ -205,11 +205,7 @@ class DeSTA25AudioPLModule(pl.LightningModule):
             if name in self.model.trainable_parameter_names:
                 trainable_parameters.append(params)
 
-        optimizer = FusedAdam(trainable_parameters, 
-                              lr=self.cfg.optim.lr,
-                              betas=(self.cfg.optim.betas),
-                              weight_decay=self.cfg.optim.weight_decay,
-                              )
+        optimizer = AdamW(trainable_parameters, lr=self.cfg.optim.lr, weight_decay=self.cfg.optim.weight_decay)
         scheduler = get_cosine_schedule_with_warmup(
             optimizer,
             num_warmup_steps=self.cfg.optim.sched.warmup_steps,
